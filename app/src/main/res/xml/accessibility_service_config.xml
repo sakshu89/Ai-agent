@@ -9,4 +9,4 @@
     android:canRequestEnhancedWebAccess="true"
     android:canRequestTouchExplorationMode="true"
     android:accessibilityFlags="flagDefault|flagRequestEnhancedWebAccess|flagReportViewIds"
-    android:settingsActivity="ai.antigem.assistant.ui.settings.PermissionSettingsScreen"/>
+    android:settingsActivity="ai.antigem.assistant.ui.MainActivity"/>
