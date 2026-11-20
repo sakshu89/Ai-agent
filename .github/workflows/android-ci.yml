@@ -70,13 +70,12 @@ jobs:
           ./gradlew :app:assembleDebug --console=plain --no-daemon > /tmp/full_build.log 2>&1
           GRADLE_EXIT=$?
           set -e
-          echo "=== Build exit code: $GRADLE_EXIT ==="
-          echo "=== Last 60 lines ==="
-          tail -60 /tmp/full_build.log || true
-          echo "=== ALL ERROR LINES ==="
-          grep -iE "^e: |error:|BUILD FAILURE|Exception|Caused by" /tmp/full_build.log 2>/dev/null | head -50 || true
-          echo "=== END ==="
-          exit 0
+          echo "=== Gradle exit code: $GRADLE_EXIT ==="
+          echo "=== Last 80 lines of build log ==="
+          tail -80 /tmp/full_build.log
+          echo "=== Error lines ==="
+          grep -iE "^e: |error:|BUILD FAILURE|Exception|Caused by|Could not|error:" /tmp/full_build.log 2>/dev/null | head -50
+          exit $GRADLE_EXIT
 
       - name: Find and list all APKs
         run: |
@@ -84,13 +83,13 @@ jobs:
           find app/build -type f 2>/dev/null | head -30
           echo "=== APK files ==="
           find . -name "*.apk" -type f 2>/dev/null | head -20
-          exit 0
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: antigem-assistant-apk
-          path: app/build/outputs/apk/**/*.apk
+          path: |
+            app/build/outputs/apk/**/*.apk
+            app/build/outputs/bundle/**/*.aab
           if-no-files-found: warn
           retention-days: 7
