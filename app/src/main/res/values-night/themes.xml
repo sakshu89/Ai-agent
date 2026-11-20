@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.App" parent="android:Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">#6366F1</item>
+        <item name="colorPrimaryContainer">#4F46E5</item>
+        <item name="colorSecondary">#0EA5E9</item>
+        <item name="colorSecondaryContainer">#155E75</item>
+        <item name="colorTertiary">#10B981</item>
+        <item name="colorError">#EF4444</item>
+        <item name="colorSurface">#1F1F1F</item>
+        <item name="colorSurfaceVariant">#2A2A2A</item>
+        <item name="colorBackground">#09090B</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorOnSecondary">#FFFFFF</item>
+        <item name="colorOnSurface">#FFFFFF</item>
+        <item name="colorOnSurfaceVariant">#A1A1AA</item>
+        <item name="colorOnBackground">#FAFAFA</item>
+        <item name="colorOutline">#3F3F46</item>
+        <item name="colorOutlineVariant">#27272A</item>
+    </style>
+</resources>
