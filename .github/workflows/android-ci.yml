@@ -19,7 +19,6 @@ on:
 env:
   ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
   JAVA_VERSION: '21'
-  GRADLE_VERSION: '9.9.1'
 
 jobs:
   build:
@@ -32,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Java ${{ env.JAVA_VERSION }}
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           java-version: ${{ env.JAVA_VERSION }}
           distribution: 'temurin'
@@ -40,40 +39,44 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: ${{ env.GRADLE_VERSION }}
+          gradle-version: 9.9.1
 
       - name: Install Android SDK command-line tools
         run: |
-          mkdir -p $ANDROID_SDK_ROOT/cmdline-tools
-          cd $ANDROID_SDK_ROOT/cmdline-tools
+          mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+          cd "$ANDROID_SDK_ROOT/cmdline-tools"
           curl -fsSL -o cmdline-tools.zip "https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip"
           unzip -q cmdline-tools.zip
           mv cmdline-tools latest
           chmod +x latest/bin/*
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_SDK_ROOT" >> "$GITHUB_ENV"
 
       - name: Accept Android SDK licenses
         run: |
-          yes | $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager --licenses >/dev/null 2>&1 || true
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
 
       - name: Install SDK components
         run: |
-          $ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager "platform-tools" "build-tools;34.0.0" "platforms;android-34"
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" "platform-tools" "build-tools;34.0.0" "platforms;android-34"
 
       - name: Configure local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+          echo "org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m" >> gradle.properties
 
       - name: Build Debug APK
         if: github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch'
         run: |
-          ./gradlew :app:assembleDebug --no-daemon
+          ./gradlew :app:assembleDebug --console=plain --no-daemon
 
       - name: Build Release APK
         if: github.event.inputs.build_type == 'release'
         run: |
-          ./gradlew :app:assembleRelease --no-daemon
+          ./gradlew :app:assembleRelease --console=plain --no-daemon
+
+      - name: Find and report APK
+        run: |
+          find app/build/outputs/apk -name "*.apk" 2>/dev/null | head -20
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
@@ -81,12 +84,3 @@ jobs:
           name: antigem-assistant-apk
           path: app/build/outputs/apk/**/*.apk
           retention-days: 7
-
-      - name: Publish release (if release build and tag)
-        if: github.event.inputs.build_type == 'release' && startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          files: app/build/outputs/apk/**/*.apk
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
