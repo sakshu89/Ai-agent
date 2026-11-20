@@ -42,7 +42,7 @@ android {
     }
 
     buildFeatures {
-        compose = true
+        compose = false
         buildConfig = true
     }
 
