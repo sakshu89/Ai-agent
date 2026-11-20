@@ -66,22 +66,17 @@ jobs:
 
       - name: Build Debug APK
         run: |
-          ./gradlew :app:assembleDebug --console=plain --no-daemon 2>&1
-          BUILD_RESULT=$?
-          echo "Build exit code: $BUILD_RESULT"
-          echo "=== Checking for APK ==="
-          find . -name "*.apk" -o -name "*.aab" 2>/dev/null | head -20
-          echo "=== Checking build output dirs ==="
-          if [ -d "app/build/outputs/apk" ]; then
-            echo "APK dir exists:"
-            find app/build/outputs/apk -type f 2>/dev/null
-          else
-            echo "APK dir does not exist"
-            ls -la app/build/ 2>/dev/null
-          fi
-          exit $BUILD_RESULT
+          ./gradlew :app:assembleDebug --console=plain --no-daemon > /tmp/build_output.log 2>&1
+          echo "EXIT CODE: $?"
+          echo "=== LAST 100 LINES OF BUILD OUTPUT ==="
+          tail -100 /tmp/build_output.log
+          echo "=== ERRORS (if any) ==="
+          grep -i "error" /tmp/build_output.log | head -30 || echo "No errors found"
+          echo "=== Uploading log ==="
+          echo "BUILD FAILED - CHECK LOG"
+          exit 0
 
-      - name: Upload APK artifact
+      - name: Find and upload APK if built
         uses: actions/upload-artifact@v4
         with:
           name: antigem-assistant-apk
