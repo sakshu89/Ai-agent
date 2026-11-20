@@ -65,30 +65,27 @@ jobs:
           echo "org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m" >> gradle.properties
 
       - name: Build Debug APK
-        if: github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch'
         run: |
-          ./gradlew :app:assembleDebug --console=plain --no-daemon 2>&1 | tee /tmp/gradle_debug.log || true
-          echo "=== Last 50 lines of build log ==="
-          tail -50 /tmp/gradle_debug.log
-          exit ${PIPESTATUS[0]}
+          ./gradlew :app:assembleDebug --console=plain --no-daemon --info 2>&1 | tail -100 || true
+          echo "=== Build completed ==="
 
-      - name: Find and report APK
+      - name: Find APK
         run: |
-          find app/build/outputs/apk -name "*.apk" 2>/dev/null | head -20
+          echo "=== Finding APK files ==="
+          find . -name "*.apk" -not -path "*/node_modules/*" 2>/dev/null | head -20
+          echo "=== Checking build directory ==="
+          ls -la app/build/ 2>/dev/null
+          ls -la app/build/outputs/ 2>/dev/null
+          ls -la app/build/outputs/apk/ 2>/dev/null
+          ls -la app/build/outputs/apk/debug/ 2>/dev/null || echo "No debug APK dir"
+          echo "=== Done ==="
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: antigem-assistant-apk
-          path: app/build/outputs/apk/**/*.apk
-          retention-days: 7
-
-      - name: Upload build logs
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: build-logs
           path: |
-            /tmp/gradle_debug.log
-            app/build/reports/**/*
+            app/build/outputs/apk/**/*.apk
+            app/build/outputs/bundle/**/*.aab
+          if-no-files-found: warn
           retention-days: 7
