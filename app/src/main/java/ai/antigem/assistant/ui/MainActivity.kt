@@ -12,6 +12,7 @@ import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import ai.antigem.assistant.R
 
 // ============================================================================
 // AntiGem Assistant — Main Activity (View-based, no Compose)
