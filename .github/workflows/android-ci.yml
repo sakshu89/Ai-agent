@@ -67,12 +67,10 @@ jobs:
       - name: Build Debug APK
         if: github.event.inputs.build_type == 'debug' || github.event_name != 'workflow_dispatch'
         run: |
-          ./gradlew :app:assembleDebug --console=plain --no-daemon
-
-      - name: Build Release APK
-        if: github.event.inputs.build_type == 'release'
-        run: |
-          ./gradlew :app:assembleRelease --console=plain --no-daemon
+          ./gradlew :app:assembleDebug --console=plain --no-daemon 2>&1 | tee /tmp/gradle_debug.log || true
+          echo "=== Last 50 lines of build log ==="
+          tail -50 /tmp/gradle_debug.log
+          exit ${PIPESTATUS[0]}
 
       - name: Find and report APK
         run: |
@@ -83,4 +81,14 @@ jobs:
         with:
           name: antigem-assistant-apk
           path: app/build/outputs/apk/**/*.apk
+          retention-days: 7
+
+      - name: Upload build logs
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: build-logs
+          path: |
+            /tmp/gradle_debug.log
+            app/build/reports/**/*
           retention-days: 7
