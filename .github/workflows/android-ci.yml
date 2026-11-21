@@ -85,6 +85,15 @@ jobs:
           echo "=== APK files ==="
           find . -name "*.apk" -type f 2>/dev/null | head -20
 
+      - name: Upload Gradle failure log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gradle-build-log
+          path: /tmp/full_build.log
+          if-no-files-found: warn
+          retention-days: 7
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
