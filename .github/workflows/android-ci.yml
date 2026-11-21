@@ -1,5 +1,8 @@
 name: Build AntiGem Assistant APK
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [ main, master ]
@@ -18,7 +21,7 @@ on:
 
 env:
   ANDROID_SDK_ROOT: ${{ github.workspace }}/android-sdk
-  JAVA_VERSION: '21'
+  JAVA_VERSION: '17'
 
 jobs:
   build:
@@ -38,8 +41,6 @@ jobs:
 
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 9.9.1
 
       - name: Install Android SDK command-line tools
         run: |
@@ -67,7 +68,7 @@ jobs:
       - name: Build Debug APK
         run: |
           set +e
-          ./gradlew :app:assembleDebug --console=plain --no-daemon > /tmp/full_build.log 2>&1
+          ./gradlew :app:testDebugUnitTest :app:assembleDebug --console=plain --no-daemon > /tmp/full_build.log 2>&1
           GRADLE_EXIT=$?
           set -e
           echo "=== Gradle exit code: $GRADLE_EXIT ==="

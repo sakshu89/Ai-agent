@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@color/color_background" android:padding="20dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Coding Agent" android:textSize="28sp" android:textStyle="bold" android:textColor="@color/color_on_background" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="GitHub is the build environment. This phone monitors plans, pull requests, workflow runs, and artifacts." android:textColor="@color/color_on_surface_variant" />
+        <EditText android:id="@+id/github_client_id" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:hint="GitHub OAuth App client ID" android:inputType="text" />
+        <Button android:id="@+id/connect_github" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Connect GitHub" />
+        <EditText android:id="@+id/repository_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:hint="Repository (owner/name)" android:inputType="text" />
+        <Button android:id="@+id/refresh_builds" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Refresh GitHub Actions" />
+        <TextView android:id="@+id/coding_status" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="16dp" android:padding="12dp" android:background="@drawable/input_background" android:textColor="@color/color_on_surface" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp" android:text="Safety: branch creation, commits, pull requests and build dispatch must follow a reviewed coding plan. Merges, releases, permission changes and production configuration always require your approval." android:textColor="@color/color_on_surface_variant" />
+    </LinearLayout>
+</ScrollView>

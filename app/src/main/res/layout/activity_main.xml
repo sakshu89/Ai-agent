@@ -9,6 +9,7 @@
 
     <!-- Top bar -->
     <LinearLayout
+        android:id="@+id/coding_agent_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -43,6 +44,31 @@
         android:layout_height="1dp"
         android:background="@color/color_outline"
         android:layout_marginVertical="8dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="10dp"
+        android:background="@drawable/input_background"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Coding Agent"
+            android:textStyle="bold"
+            android:textColor="@color/color_on_surface" />
+
+        <TextView
+            android:id="@+id/github_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/color_on_surface_variant" />
+    </LinearLayout>
 
     <!-- Chat messages container -->
     <ScrollView

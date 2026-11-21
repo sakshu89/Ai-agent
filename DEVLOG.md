@@ -79,3 +79,9 @@ adb install app/build/outputs/apk/debug/app-debug.apk
 - Token usage: ~45K/512K tokens
 - Time: ~3 hours on this device
 - Remaining budget: ~467K tokens
+# 2026-11-21 — Coding Agent and durable chat integration
+
+- Replaced the crash-prone chat view insertion path with a persistent Room-backed conversation and message flow.
+- Added a Coding Agent screen with GitHub OAuth device authorization, Keystore-protected token storage, and GitHub Actions workflow-status retrieval.
+- Adjusted remote CI to use Java 17 and the Gradle wrapper (8.7), with unit tests before APK assembly.
+- Local Android builds were deliberately not run: the product requirement assigns builds to GitHub Actions rather than the Android device environment.

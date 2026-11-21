@@ -82,6 +82,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.CodingAgentActivity" android:exported="false" />
+
         <!-- Accessibility Service -->
         <service
             android:name=".control.AssistantAccessibilityService"

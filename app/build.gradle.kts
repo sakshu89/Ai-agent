@@ -56,6 +56,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("androidx.activity:activity:1.8.2")
     implementation("androidx.lifecycle:lifecycle-runtime:2.8.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
     implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.2")
 
     // Room (Database)

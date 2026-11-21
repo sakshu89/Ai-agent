@@ -4,7 +4,7 @@ A powerful, autonomous Android AI assistant capable of operating as an intellige
 
 ## Status
 
-**Source code is complete and ready to build.** APK building must be done on x86_64 (Windows/Mac/Linux) due to the architecture of Android build tools.
+This project is under active development. APK builds are intentionally performed by GitHub Actions or Android Studio on a supported x86_64 machine; the Android device is a control surface, not the primary build host.
 
 ## Features
 
@@ -20,6 +20,7 @@ A powerful, autonomous Android AI assistant capable of operating as an intellige
 - View-based UI (Material colors, light/dark themes)
 - Local encryption (Android Keystore)
 - Permission management dashboard
+- GitHub Coding Agent dashboard with encrypted device-flow authentication and GitHub Actions status
 
 ## Architecture
 
@@ -42,7 +43,7 @@ Modular Kotlin architecture:
 3. Run: Build → Generate Signed Bundle/APK → APK
 4. Or: Build → Build Bundle → APK
 
-### Option 2: Gradle CLI
+### Option 2: Gradle CLI (desktop diagnostics only)
 ```bash
 cd antigem-assistant
 echo "sdk.dir=/path/to/Android/Sdk" > local.properties
@@ -71,15 +72,14 @@ https://github.com/sakshu89/Ai-agent/actions
 - [SERVERS.md](SERVERS.md) - AI server connection guide
 - [TROUBLESHOOTING.md](TROUBLESHOOTING.md) - Common issues
 - [CAPABILITIES.md](CAPABILITIES.md) - Implemented vs. unsupported features
+- [GITHUB_REMOTE_BUILDS.md](GITHUB_REMOTE_BUILDS.md) - GitHub device authorization and remote APK builds
 - [DEVLOG.md](DEVLOG.md) - Development log
 
-## Build Status
+## GitHub remote builds
 
-The build on GitHub Actions (x86_64) has been configured but continues to fail. This is because:
-1. The build on this device (aarch64) cannot use Google's x86_64-only AAPT2 tool
-2. The GitHub Actions build failure reason is not visible (API requires admin rights)
+The repository workflow runs unit tests and builds a debug APK on GitHub-hosted runners. It uploads the APK as a short-lived workflow artifact. Configure a GitHub OAuth App with device authorization enabled, then enter its client ID in the app's Coding Agent screen. The app encrypts access tokens with Android Keystore and never logs them.
 
-**To build the APK:** Use Android Studio on x86_64 Windows/Mac/Linux.
+This checkout has not been built by GitHub Actions during this change, so no APK or build-success claim is made here.
 
 ## License
 
